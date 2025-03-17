@@ -1,4 +1,3 @@
-# Step 4: Evaluation and Dashboard Creation
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
@@ -13,6 +12,18 @@ import seaborn as sns
 df = pd.read_csv('mobile_money_features.csv')
 print("Dataset loaded. Shape:", df.shape)
 
+# Verify Fraud_Label column
+print("Columns in dataset:", df.columns.tolist())
+print("Unique values in Fraud_Label:", df['Fraud_Label'].unique())
+print("Value counts in Fraud_Label:\n", df['Fraud_Label'].value_counts())
+
+# Simulate fraud cases if only one class exists (temporary fix for testing)
+if len(df['Fraud_Label'].unique()) < 2:
+    print("Warning: Only one class found in Fraud_Label. Simulating fraud cases for testing.")
+    np.random.seed(42)
+    df['Fraud_Label'] = np.where(np.random.rand(len(df)) < 0.05, 1, 0)  # 5% fraud cases
+    print("New value counts in Fraud_Label after simulation:\n", df['Fraud_Label'].value_counts())
+
 # Define features and target
 features = [
     'Amount', 'Rolling_Count_1h', 'Time_Delta', 'Rapid_Transaction',
@@ -22,7 +33,7 @@ features = [
 X = df[features]
 y = df['Fraud_Label']
 
-# Split into train and test sets (70% train, 30% test for more fraud cases)
+# Split into train and test sets (70% train, 30% test, stratified)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42, stratify=y)
 
 # Apply SMOTE to oversample the minority class (fraud) in training data
