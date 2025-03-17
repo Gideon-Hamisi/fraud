@@ -111,7 +111,7 @@ elif page == "Feature Importance":
     st.pyplot(fig)
 
 # Footer
-st.sidebar.write("Built with Streamlit by [Your Name]")
+st.sidebar.write("Built with Streamlit by GIDEON_MUTINDA")
 
 # Console output for verification
 print("\nClassification Report:")
